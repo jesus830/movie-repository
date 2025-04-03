@@ -1,0 +1,60 @@
+#include <iostream>
+#include <aws/core/Aws.h>
+#include <aws/dynamodb/DynamoDBClient.h>
+#include <aws/dynamodb/model/PutItemRequest.h>
+#include <aws/dynamodb/model/GetItemRequest.h>
+#include <aws/dynamodb/model/AttributeValue.h>
+#include "MovieRepository.h"
+
+/**
+ * Example demonstrating how to add a movie to DynamoDB using the MovieRepository class
+ * 
+ * This example shows:
+ * 1. Creating a MovieRepository instance
+ * 2. Adding a new movie to the database
+ * 3. Verifying the movie was added by retrieving it
+ */
+int main()
+{
+    // Initialize the AWS SDK
+    Aws::SDKOptions options;
+    Aws::InitAPI(options);
+    
+    {
+        // Create a MovieRepository instance
+        MovieRepository movies;
+        
+        // Add "The Hunger Games: Mockingjay - Part 1" to the database
+        // This demonstrates how to insert a new item into DynamoDB
+        bool success = movies.Insert(
+            "The Hunger Games: Mockingjay - Part 1",    // title
+            2014,       // year
+            "Katniss Everdeen is in District 13 after she shatters the games forever. Under the leadership of President Coin and the advice of her trusted friends, Katniss spreads her wings as she fights to save Peeta and a nation moved by her courage.",     // plot
+            6.7      // rating
+        );
+        
+        if (success) {
+            std::cout << "Movie added successfully" << std::endl;
+            
+            // Confirm that the movie was added by retrieving it
+            auto movie = movies.Select(
+                "The Hunger Games: Mockingjay - Part 1",    // title
+                2014        // year
+            );
+            
+            if (movie.has_value()) {
+                // The movie was found
+                std::cout << "Movie found: " << movie->ToString() << std::endl;
+            } else {
+                // The movie was not found
+                std::cout << "Movie not found" << std::endl;
+            }
+        } else {
+            std::cout << "Failed to add movie" << std::endl;
+        }
+    }
+    
+    // Shutdown the AWS SDK
+    Aws::ShutdownAPI(options);
+    return 0;
+}

@@ -1,0 +1,43 @@
+using System;
+using System.Threading.Tasks;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using System.Collections.Generic;
+
+namespace MovieDatabase
+{
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            // Create a MovieRepository instance
+            var movies = new MovieRepository();
+
+            // Add "Prometheus" to the database
+            // This demonstrates how to insert a new item into DynamoDB
+            await movies.InsertAsync(
+                title: "Prometheus",
+                year: 2012,
+                plot: "Following clues to the origin of mankind, a team finds a structure on a distant moon, but they soon realize they are not alone.",
+                rating: 7
+            );
+
+            // Confirm that the movie was added by retrieving it
+            var movie = await movies.SelectAsync(
+                title: "Prometheus",
+                year: 2012
+            );
+
+            if (movie != null)
+            {
+                // The movie was found
+                Console.WriteLine($"Movie found: {movie}");
+            }
+            else
+            {
+                // The movie was not found
+                Console.WriteLine("Movie not found");
+            }
+        }
+    }
+}

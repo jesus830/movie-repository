@@ -1,0 +1,26 @@
+
+from movies import MovieRepository
+
+# Create a new movie repository using the default configuration
+movies = MovieRepository()
+
+# Add Now You See Me 2 to the database
+movies.insert(
+    title="Now You See Me 2", 
+    year=2016, 
+    plot="The Four Horsemen resurface and are forcibly recruited by a tech genius to pull off their most impossible heist yet.", 
+    rating=6.5
+)
+
+# Confirm that the movie was added
+movie = movies.select(
+    title="Now You See Me 2", 
+    year=2016
+)
+if movie:
+    # The movie was found
+    print(f"Movie found: {movie}")
+else:
+    # The movie was not found
+    print("Movie not found")
+    

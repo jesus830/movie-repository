@@ -1,0 +1,26 @@
+
+from movies import MovieRepository
+
+# Create a new movie repository using the default configuration
+movies = MovieRepository()
+
+# Add Eagle Eye to the database
+movies.insert(
+    title="Eagle Eye", 
+    year=2008, 
+    plot="Jerry and Rachel are two strangers thrown together by a mysterious phone call from a woman they have never met. Threatening their lives and family, she pushes Jerry and Rachel into a series of increasingly dangerous situations, using the technology of everyday life to track and control their every move.", 
+    rating=6.6
+)
+
+# Confirm that the movie was added
+movie = movies.select(
+    title="Eagle Eye", 
+    year=2008
+)
+if movie:
+    # The movie was found
+    print(f"Movie found: {movie}")
+else:
+    # The movie was not found
+    print("Movie not found")
+    
